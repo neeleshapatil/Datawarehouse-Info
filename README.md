@@ -28,7 +28,7 @@ Cost savings
 ## 3) What is Data Lake?
 A Data Lake is a storage repository that can store a large amount of structured, semi-structured, and unstructured data. It is a place to store every type of data in its native format. When organizations need low-cost storage for unformatted, unstructured data from multiple sources that they intend to use for some purpose in the future, a data lake might be the right choice
 
-## 4) Data Lake vs Datawarehous
+## 4) Data Lake vs Datawarehouse
   
   - ### 1 Data Storage 
   A data lake contains all an organization's data in a raw, unstructured form, and can store the data indefinitely — for immediate or future use.
