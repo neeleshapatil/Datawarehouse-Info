@@ -263,3 +263,4 @@ A surrogate key is a system generated (could be GUID, sequence, etc.) value with
 2) Requires more table joins to child tables since data has no meaning on its own.
 
 3) Key value has no relation to data so technically design breaks 3NF
+4) Surrogate keys are typically not useful when searching for datasince they have no meaning
