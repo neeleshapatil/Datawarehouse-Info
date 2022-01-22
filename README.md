@@ -164,7 +164,8 @@ In data warehouse design, frequently we run into a situation where there are yes
 
 Slowly changing dimensions or SCD are dimensions that changes slowly over time, rather than regular basis.  In data warehouse environment, there may be a requirement to keep track of the change in dimension values and are used to report historical data at any given point of time.
 
-- Type 1: The new record replaces the original record. No trace of the old record exists.
+### Type 1: 
+- The new record replaces the original record. No trace of the old record exists.
 
 When no historical reporting needed then use this approach
 
@@ -180,9 +181,30 @@ After Christina moved from Illinois to California, the new information replaces 
 |--------------|-------|----
 |1001	| Christina	| California
 
-- Type 2 : In Type 2 Slowly Changing Dimension, a new record is added to the table to represent the new information. Therefore, both the original and the new record will be present. The new record gets its own primary key.
+### Type 2 : 
 
-| Customer Key | 	Name	| State
-| ------------ |-------|------
-|1001	| Christina	| Illinois
-|1005|Christina	| California
+In Type 2 Slowly Changing Dimension, a new record is added to the table to represent the new information. Therefore, both the original and the new record will be present. The new record gets its own primary key.
+
+| Customer Key | 	Name	| State|version no
+| ------------ |-------|------|-----
+|1001	| Christina	| Illinois|1
+|1005|Christina	| California|2
+
+But we can't understand which record out of these two is current or active record. So version number column is added and we can use max version into reporting.
+
+ Some SCD type 2 implementations use effective from and to date with flag indicating latest record. Version = 1 and Eff End Date = NULL indicates current or latest tuple versions. In some implementation, data modeller uses future date (9999-12-31) as effective to date.
+ 
+| Customer Key | 	Name	| State|Eff Start Date|Eff End Date|version
+| ------------ |-------|------|-----|----------|--------
+|1001	| Christina	| Illinois|01/01/2021|12/31/2021|0
+|1005|Christina	| California|01/01/2022|NULL|1
+
+Advantages:
+
+- This allows us to accurately keep all historical information.
+
+Disadvantages:
+
+- This will cause the size of the table to grow fast. In cases where the number of rows for the table is very high to start with, storage and performance can become a concern.
+
+- This necessarily complicates the ETL process.
