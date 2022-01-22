@@ -295,6 +295,8 @@ A surrogate key is a system generated (could be GUID, sequence, etc.) value with
 
  1) No business logic in key so no changes based on business requirements.  
  2) Better performance since key value is smaller.  Less disk IO is required on when accessing single column indexes. Faster query performance.
+ 3) Required to implement history of slowly changing dimensions.
+ 4) Avoid conflicts among backend application keys. Different backend applications may use different columns as the dimension key
 
 - Surrogate Key Cons
 
@@ -316,7 +318,7 @@ A surrogate key is a system generated (could be GUID, sequence, etc.) value with
 5) Queries are simple 
 
 - Snowflake schema
-
+1) When a Dimension relates to another dimension you have a snowflake
 1) Uses less disk space because data is normalized and there is minimal data redundancy.
 2) Maintenance is simple due to a smaller risk of data integrity violations and low level of data redundancy.
 3) Queries can be very complex, including many levels of joins between many tables.
