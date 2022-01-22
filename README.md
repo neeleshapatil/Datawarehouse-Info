@@ -264,3 +264,32 @@ A surrogate key is a system generated (could be GUID, sequence, etc.) value with
 
 3) Key value has no relation to data so technically design breaks 3NF
 4) Surrogate keys are typically not useful when searching for datasince they have no meaning
+
+### 13) Start vs Snowflake schema's
+
+- Star schema
+
+1) The data is denormalized (flatten) for easier reporting.
+2) Dimension tables are each connected to the fact table via their primary key, which is a foreign key for the fact table
+3) Star schema results in high data redundancy and duplication.
+4) It requires a lot more disk space than snowflake schema to store the same amount of data.
+5) Queries are simple 
+
+- Snowflake schema
+
+1) Uses less disk space because data is normalized and there is minimal data redundancy.
+2) Maintenance is simple due to a smaller risk of data integrity violations and low level of data redundancy.
+3) Queries can be very complex, including many levels of joins between many tables.
+4) Queries can be slower in some cases because many joins should be done to produce final output
+
+![image](https://user-images.githubusercontent.com/67767423/150621368-499e67a1-2cc4-49ed-851a-f5fb10ef1330.png)
+
+
+If a dimension is very sparse (i.e. most of the possible values for the dimension have no data) and/or a dimension has a very long list of attributes which may be
+used in a query, the dimension table may occupy a significant proportion of the database and snow flaking may be appropriate. Snowflake schemas are generally used when a dimensional table becomes very big.
+
+If the purpose of your project is to do more of dimension analysis, you should go for snowflake schema. For Example, if you need to find out that “how many subscribers are tied to a particular plan which is currently active?” – go with the snowflake model.
+
+If the purpose of your project is to do more of a metrics analysis, you should go with a star schema. For Example, if you need to find out that “what is the claim amount paid to a particular subscriber?” – go with a star schema.
+
+In my project, we used snowflake schema because we had to do analysis across several dimensions and generate summary reports for the business. Another reason for using snowflake schema was it is less memory consumption.
