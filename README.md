@@ -131,7 +131,16 @@ Eg: A fact table which has only product key and date key is a factless fact. The
 - Mostly additive facts
 ### Periodic Sanpshot Fact Table
 - This type of fact table describes the state of things in a particular instance of time, and usually includes more semi-additive and non-additive facts
-- Stores current state of data at regular interval of time, so we can explain state of entities at particular instance of time. Month end batch etc.
+- A periodic fact table or periodic fact entity stores one row for a group of transactions that happen over a period of time. Month end batch etc.
 
 ![image](https://user-images.githubusercontent.com/67767423/150616261-aeee0d06-2bd3-40c6-948d-7ebf3b6aa068.png)
+
+### Accumulated Fact Table
+- An accumulating fact table or accumulating fact entity stores one row for the entire lifetime of an event.
+- It contains Multiple date dimensions , such as order fulﬁllment or claim processing, that have a deﬁned start point, standard intermediate steps, and deﬁned end point.
+- As pipeline progress occurs, the accumulating fact table row is revisited and updated like Claim paid date will be updated once claim is settled. 
+
+Initial stage, Paid date would be not available but updated once claim was paid
+
+![image](https://user-images.githubusercontent.com/67767423/150617567-2fcbceaf-cbd7-44d4-9f45-0c6b96d4b7f9.png)
 
