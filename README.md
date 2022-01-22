@@ -92,3 +92,46 @@ In OLAP, the emphasis is on response time to these complex queries. Examples inc
 |Database Design : Highly normalized with many tables|Typically de-normalized with fewer tables; use of star and/or snowflake schemas|
 |Backup religiously; operational data is critical to run the business, data loss is likely to entail significant monetary loss and legal liability|Instead of regular backups, some environments may consider simply reloading the OLTP data as a recovery method|
 |Space Requirements : Can be relatively small if historical data is archived| Larger due to the existence of aggregation structures and history data; requires more indexes than OLTP
+## 8) Types of Facts
+
+- Additive:
+
+Additive facts are facts that can be summed up through all of the dimensions in the fact table. A sales fact is a good example for additive fact.
+|   f1   |
+|------|
+|date|
+|Store|
+|Product|
+|Sales_Amount|
+
+The purpose of this table is to record the sales amount for each product in each store on a daily basis. Sales_Amount is the fact. In this case, Sales_Amount is an additive fact, because you can sum up this fact along any of the three dimensions present in the fact table -- date, store, and product. 
+
+For example, the sum of Sales_Amount for all 7 days in a week represents the total sales amount for that week.
+
+- Semi-Additive:
+
+Semi-additive facts are facts that can be summed up for some of the dimensions in the fact table, but not the others.
+Eg: Daily balances fact can be summed up through the customers dimension but not through the time dimension.
+
+- Non-Additive:
+
+Non-additive facts are facts that cannot be summed up for any of the dimensions present in the fact table.
+Eg: Facts which have percentages, ratios calculated.
+
+- Factless Fact Table:
+
+In the real world, it is possible to have a fact table that contains no measures or facts. These tables are called "Factless Fact tables".
+
+Eg: A fact table which has only product key and date key is a factless fact. There are no measures in this table. But still you can get the number products sold over a period of time.
+
+## 9) Types of Fact tables
+
+### Transaction Fact Table 
+- Grain set to a single transaction. Lowest level of details.
+- Mostly additive facts
+### Periodic Sanpshot Fact Table
+- This type of fact table describes the state of things in a particular instance of time, and usually includes more semi-additive and non-additive facts
+- Stores current state of data at regular interval of time, so we can explain state of entities at particular instance of time. Month end batch etc.
+
+![image](https://user-images.githubusercontent.com/67767423/150616261-aeee0d06-2bd3-40c6-948d-7ebf3b6aa068.png)
+
