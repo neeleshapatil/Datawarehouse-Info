@@ -144,3 +144,45 @@ Initial stage, Paid date would be not available but updated once claim was paid
 
 ![image](https://user-images.githubusercontent.com/67767423/150617567-2fcbceaf-cbd7-44d4-9f45-0c6b96d4b7f9.png)
 
+![image](https://user-images.githubusercontent.com/67767423/150617658-913dec10-dfc7-423a-9d75-a32e80f06cec.png)
+
+## 10) Types of Dimension Tables
+
+- Conformed Dimension
+A conformed dimension is the dimension that is shared across multiple data mart or subject area. Company may use the same dimension table across different projects without making any changes to the dimension tables.
+
+Conformed dimension example would be Customer dimension, i.e. both marketing and sales department can use Customer dimension for their reporting purpose.
+
+- Degenerate Dimension  
+A degenerate dimension is a dimension key in the fact table that does not have its own dimension table. This is because useful dimensional data is sometimes stored in a fact table to reduce duplication, especially when you have a very large fact table and also avoids expensive join between tables. Example Order Number
+
+- Junk Dimension
+
+In data warehouse design, frequently we run into a situation where there are yes/no indicator fields in the source system. A junk dimension combines several low-cardinality flags and attributes into a single dimension table rather than modeling them as separate dimensions. If the cardinality of each attribute is relatively low, and there are only a few attributes, then the easiest way to create the dimension is to cross-join the source system lookup tables. This creates all possible combinations of attributes, even if they might never exist in the real world.
+
+## 11) Slowly changing Dimensions -
+
+Slowly changing dimensions or SCD are dimensions that changes slowly over time, rather than regular basis.  In data warehouse environment, there may be a requirement to keep track of the change in dimension values and are used to report historical data at any given point of time.
+
+- Type 1: The new record replaces the original record. No trace of the old record exists.
+
+When no historical reporting needed then use this approach
+
+In our example, recall we originally have the following table:
+
+| Customer Key | 	Name	| State
+| ------------ |-------|------
+|1001	| Christina	| Illinois
+
+After Christina moved from Illinois to California, the new information replaces the new record, and we have the following table:
+
+| Customer Key	| Name	| State
+|--------------|-------|----
+|1001	| Christina	| California
+
+- Type 2 : In Type 2 Slowly Changing Dimension, a new record is added to the table to represent the new information. Therefore, both the original and the new record will be present. The new record gets its own primary key.
+
+| Customer Key | 	Name	| State
+| ------------ |-------|------
+|1001	| Christina	| Illinois
+|1005|Christina	| California
