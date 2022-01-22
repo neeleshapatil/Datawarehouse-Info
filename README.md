@@ -196,8 +196,8 @@ But we can't understand which record out of these two is current or active recor
  
 | Customer Key | 	Name	| State|Eff Start Date|Eff End Date|version
 | ------------ |-------|------|-----|----------|--------
-|1001	| Christina	| Illinois|01/01/2021|12/31/2021|0
-|1005|Christina	| California|01/01/2022|NULL|1
+|1001	| Christina	| Illinois|01-JAN-2021|31-DEC-2021|0
+|1005|Christina	| California|01-JAN-2022|NULL|1
 
 Advantages:
 
@@ -208,3 +208,58 @@ Disadvantages:
 - This will cause the size of the table to grow fast. In cases where the number of rows for the table is very high to start with, storage and performance can become a concern.
 
 - This necessarily complicates the ETL process.
+
+### Type 3 :
+
+Adds new attribute to store changed value, preserve partial history.
+
+|Customer Key |	Name	| Original State	| Current State	| Effective Date
+|-------------|-----|-----------------|---------------|------------
+|1001	|Christina	|Illinois	|California	|15-JAN-2003
+
+Advantages:
+
+- This does not increase the size of the table, since new information is updated.
+
+- This allows us to keep some part of history.
+
+Disadvantages:
+
+- Type 3 will not be able to keep all history where an attribute is changed more than once. For example, if Christina later moves to Texas on December 15, 2003, the California information will be lost.
+
+### 12) Surrogate Key vs Natural Key :
+
+- Natural key
+
+A natural key is a column or set of columns that already exist in the table (e.g. they are attributes of the entity within the data model) and uniquely identify a record in the table.  Since these columns are attributes of the entity they obviously have business meaning.
+
+- Natural Key Pros
+
+1)  Key values have business meaning and can be used as a search key when querying the table
+
+2) Column(s) and primary key index already exist so no disk extra space is required for the extra column/index that would be used by a surrogate key column
+
+3) Fewer table joins since join columns have meaning.  For example, this can reduce disk IO by not having to perform extra reads on a lookup table
+
+- Natural Key Cons
+
+1) disadvantage of natural keys is that because they have business meaning they are effectively coupled to your business: you may need to rework your key when your business requirements change. For example, if your users decide to make CustomerNumber alphanumeric instead of numeric then in addition to updating the schema for the Customer table (which is unavoidable) you would have to change every single table where CustomerNumber is used as a foreign key.
+
+2) Can't enter record until key value is known.  It's sometimes beneficial for an application to load a placeholder record in one table then load other tables and then come back and update the main table.
+
+- Surrogate Key
+
+A surrogate key is a system generated (could be GUID, sequence, etc.) value with no business meaning that is used to uniquely identify a record in a table. It goes sequential.
+
+- Surrogate Key Pros
+
+ 1) No business logic in key so no changes based on business requirements.  
+ 2) Better performance since key value is smaller.  Less disk IO is required on when accessing single column indexes. Faster query performance.
+
+- Surrogate Key Cons
+
+1) Extra column(s)/index for surrogate key will require extra disk space
+
+2) Requires more table joins to child tables since data has no meaning on its own.
+
+3) Key value has no relation to data so technically design breaks 3NF
