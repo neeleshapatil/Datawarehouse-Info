@@ -227,6 +227,46 @@ Disadvantages:
 
 - Type 3 will not be able to keep all history where an attribute is changed more than once. For example, if Christina later moves to Texas on December 15, 2003, the California information will be lost.
 
+### Type 4 -  
+Using historical table
+
+In this method a separate historical table is used to track all dimension's attribute historical changes for each of the dimension. The 'main' dimension table keeps only the current data
+
+Current Table :
+
+| Customer Key	| Name	| State
+|--------------|-------|----
+|1001	| Christina	| California
+
+Historical table :
+
+| Customer Key | 	Name	| State|Eff Start Date|Eff End Date
+| ------------ |-------|------|-----|----------
+|1001	| Christina	| Illinois|01-JAN-2021|31-DEC-2021
+|1005|Christina	| California|01-JAN-2022|31-DEC-9999
+
+
+### Type 6 - 
+Combine approaches of types 1,2,3 (1+2+3=6). In this type we have in dimension table such additional columns as:
+
+current_type - for keeping current value of the attribute. All history records for given item of attribute have the same current value.
+
+historical_type - for keeping historical value of the attribute. All history records for given item of attribute could have different values.
+
+start_date - for keeping start date of 'effective date' of attribute's history.
+
+end_date - for keeping end date of 'effective date' of attribute's history.
+
+current_flag / version - for keeping information about the most recent record.
+
+In this method to capture attribute change we add a new record as in type 2. The current_type information is overwritten with the new one as in type 1. We store the history in a historical_column as in type 3.
+
+|Customer Key |	Name	| Current State	| Historical State	| Effective Start Date| Eff End Date|Current_Flag
+|-------------|----- | -----------------|---------------|------------|-----------|--------
+|1001	        |Christina	|Houston	|Illinois	|15-JAN-2003 |31-DEC-2003|N
+|1002	        |Christina	|Houston	|California	|01-JAN-2004 |31-DEC-2004|N
+|1002	        |Christina	|Houston	|Houston	|01-JAN-2005 |31-DEC-9999|N
+
 ### 12) Surrogate Key vs Natural Key :
 
 - Natural key
